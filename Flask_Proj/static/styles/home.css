@@ -1,0 +1,12 @@
+table, th, td {
+    /*border: 1px solid;*/
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: left;
+}
+
+th {
+    background-color: #f54e25
+}
+
+tr:hover {background-color: coral;}

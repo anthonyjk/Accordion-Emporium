@@ -1,5 +1,7 @@
 import scrapy
 from scrapy.crawler import CrawlerProcess
+from twisted.internet import reactor
+from threading import Thread
 
 # on CMD:
 # scrapy crawl accordion
@@ -21,16 +23,16 @@ class AccordionSpider(scrapy.Spider):
             yield response.follow(next_page, callback=self.parse)
 
 def crawl_to_json():
-	settings = {
-			'FEEDS': {
-					'accordion.json': {
-						'format': 'json',
-						'overwrite': True
-					}
-			},
-			'LOG_LEVEL': 'INFO'
-	}
-	process = CrawlerProcess(settings)
+    settings = {
+            'FEEDS': {
+                    'accordion.json': {
+                        'format': 'json',
+                        'overwrite': True
+                    }
+            },
+            'LOG_LEVEL': 'INFO'
+    }
+    process = CrawlerProcess(settings)
 
-	process.crawl(AccordionSpider)
-	process.start()
+    process.crawl(AccordionSpider)
+    process.start()

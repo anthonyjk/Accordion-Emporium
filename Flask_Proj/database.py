@@ -23,9 +23,12 @@ mydb = mysql.connector.connect(
     database = "accordions"
 )
 
+mycursor = mydb.cursor(buffered=True)
+
 def get_sql_data():
+    global mycursor
+
     sql = "SELECT * FROM information"
-    mycursor = mydb.cursor()
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
 
@@ -47,7 +50,7 @@ def load_json(file):
     return str_data
 
 def update_database(data, overwrite, push = False):
-    mycursor = mydb.cursor()
+    global mycursor
 
     if overwrite:
         mycursor.execute("DELETE FROM information")
@@ -69,9 +72,9 @@ def update_database(data, overwrite, push = False):
        # print(x)
 
 def create_sql_template():
-    sql = "SELECT * FROM information"
+    global mycursor
 
-    mycursor = mydb.cursor()
+    sql = "SELECT * FROM information"
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
 

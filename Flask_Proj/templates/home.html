@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Accordion Information</title>
+    <title>Accordion Emporium</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/home.css') }}">
 </head>
 <body>
+    <h1>The Accordion Emporium</h1>
+    <!--
+    Figure out re-running scrapy spider another time
+
     <form action="{{ url_for('refresh_list') }}" method="post">
         <button type="submit">Refresh</button>
+    </form> -->
+
+    <form action="{{ url_for('sort_price' )}}" method="post">
+        <button type="submit">Price Sort</button>
     </form>
+
     <table>
         <tr>
             <th>ID</th>

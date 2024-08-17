@@ -2,8 +2,9 @@ import sys
 from flask import Flask, render_template, request, redirect, url_for
 import scrapy
 from scrapy.crawler import CrawlerProcess
+from threading import Thread
 
-sys.path.append('C:\\Users\\ajtru\\Music\\accordionscraper\\accordionscraper\\spiders')
+sys.path.append('C:\\Users\\ajtru\\Music\\Accordion-Emporium\\accordionscraper\\spiders')
 import database
 from  accordionspider import AccordionSpider, crawl_to_json
 
@@ -35,13 +36,19 @@ def home():
 def about():
 	return render_template('about.html')
 
+@app.route("/sort_price", methods=['POST'])
+def sort_price():
+	#database.sort_price()
+	return redirect(url_for("home"))
+
 @app.route('/refresh_list', methods=['POST'])
 def refresh_list():
 	recrawl()
 	return redirect(url_for("home"))
 
 def recrawl():
-	crawl_to_json()
+	thread = Thread(target=crawl_to_json())
+	thread.start()
 
 	data = database.load_json('accordion.json')
 	database.update_database(data, True, push=True)
