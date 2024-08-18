@@ -22,13 +22,15 @@ app = Flask(__name__)
 # export FLASK_DEBUG=1
 # debug mode
 
+sort_pref = "accID"
+
 @app.route("/")
 def home():
-
+	global sort_pref
 	json_data = database.load_json('accordion.json')
 	database.update_database(json_data, True, push=True)
 
-	data = database.get_sql_data()
+	data = database.get_sql_data(sort_pref)
 
 	return render_template('home.html', data = data)
 
@@ -36,10 +38,15 @@ def home():
 def about():
 	return render_template('about.html')
 
-@app.route("/sort_price", methods=['POST'])
-def sort_price():
-	#database.sort_price()
+@app.route("/sort_list", methods=['POST'])
+def sort_list():
+	sort = request.form['sort_list']
+	update_sort_pref(sort)
 	return redirect(url_for("home"))
+
+def update_sort_pref(new):
+	global sort_pref
+	sort_pref = new
 
 @app.route('/refresh_list', methods=['POST'])
 def refresh_list():

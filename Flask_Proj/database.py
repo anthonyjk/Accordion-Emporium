@@ -25,10 +25,9 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor(buffered=True)
 
-def get_sql_data():
+def get_sql_data(row_name = "accID"):
     global mycursor
-
-    sql = "SELECT * FROM information"
+    sql = f"SELECT * FROM information ORDER BY {row_name}"
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
 
@@ -59,8 +58,10 @@ def update_database(data, overwrite, push = False):
         ID = i+1
         name = data[i]['name']
         price = float(data[i]['price'])
-        sql = "INSERT INTO information (accID, name, price) VALUES (%s, %s, %s)"
-        val = [ID, name, price]
+        sql = "INSERT INTO information (accID, name, price, preowned, brand, color, extra, type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+
+        name, preowned, brand, color, extra, a_type = alamo_vars(name)
+        val = [ID, name, price, preowned, brand, color, extra, a_type]
         mycursor.execute(sql, val)
 
     if(push):
@@ -70,6 +71,34 @@ def update_database(data, overwrite, push = False):
     #myresult = mycursor.fetchall()
     #for x in myresult:
        # print(x)
+
+def alamo_vars(name):
+    preowned = False
+    color = ""
+    if "pre-owned" in name.lower() or "pre owned" in name.lower():
+        preowned = True
+        name = name[10:len(name) - 7]
+
+    print(name)
+
+    if " - " in name:
+        name, color = name.split(" - ")
+    elif ", " in name:
+        name, color = name.split(", ")
+    else:
+        color = "Not Listed"
+    brand = name.split(" ")[0]
+    name = name[len(brand) + 1:]
+
+    extra = " "
+    if "w/" in color:
+        color, extra = color.split(" w/ ")
+
+    a_type = "Button"
+    if "piano" in name.lower():
+        a_type = "Piano"
+
+    return [name, preowned, brand, color, extra, a_type]
 
 def create_sql_template():
     global mycursor

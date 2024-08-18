@@ -6,29 +6,38 @@
 </head>
 <body>
     <h1>The Accordion Emporium</h1>
-    <!--
-    Figure out re-running scrapy spider another time
-
-    <form action="{{ url_for('refresh_list') }}" method="post">
-        <button type="submit">Refresh</button>
-    </form> -->
-
-    <form action="{{ url_for('sort_price' )}}" method="post">
-        <button type="submit">Price Sort</button>
+    <form action="{{ url_for('sort_list' )}}" method="post">
+        <select id="sort_list" name="sort_list">
+            <option value="price">Price</option>
+            <option value="brand">Brand</option>
+            <option value="name">Name</option>
+            <option value="preowned">Pre-Owned</option>
+            <option value="color">Color</option>
+            <option value="type">Type</option>
+        </select>
+        <input type="submit" value="Submit">
     </form>
 
     <table>
         <tr>
-            <th>ID</th>
+            <th>Brand</th>
             <th>Name</th>
+            <th>Type</th>
+            <th>Color</th>
+            <th>Extras</th>
             <th>Price</th>
+            <th>Pre Owned</th>
         </tr>
         <ul>
         {% for item in data %}
             <tr>
-                <td>{{item[0]}}</td>
+                <td>{{item[4]}}</td>
                 <td>{{item[1]}}</td>
+                <td>{{item[7]}}</td>
+                <td>{{item[5]}}</td>
+                <td>{{item[6]}}</td>
                 <td>{{item[2]}}</td>
+                <td>{{item[3] == 1}}</td>
             </tr>
         {% endfor %}
         </ul>
