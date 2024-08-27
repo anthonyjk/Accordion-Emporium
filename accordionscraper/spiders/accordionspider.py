@@ -1,13 +1,36 @@
 import scrapy
 from scrapy.crawler import CrawlerProcess
-from twisted.internet import reactor
-from threading import Thread
 
 # on CMD:
-# scrapy crawl accordion
+# scrapy crawl alamo
 
-class AccordionSpider(scrapy.Spider):
-    name = 'accordion'
+class LibertySpider(scrapy.Spider):
+    name = 'liberty'
+    start_urls = ['https://www.libertybellows.com/shop/Piano-Accordions.htm?pageNum=1']
+
+   # response.css('div.cItemDiv a::attr(href)')
+   # pages = response.css('div.col-lg-4.col-md-6.col-sm-12.col-xs-12.align-center-between a::attr(href)').get()
+
+    def parse(self, response):
+        #price = response.css('p.cItemPrice::text').get()
+
+        for link in response.css('div.cItemDiv a::attr(href)'):
+            yield response.follow(link.get(), callback=self.page_crawl)
+
+    def page_crawl(self, response):
+       information = response.css('p#prod_description::text')
+       data = []
+       for info in information:
+          data.append(info.get())
+
+       print(data)
+
+       yield {
+            'info': data
+        }
+
+class AlamoSpider(scrapy.Spider):
+    name = 'alamo'
     start_urls = ['https://www.alamomusic.com/collections/accordions?page=1&grid_list=grid-view']
 
     def parse(self, response):
@@ -34,5 +57,5 @@ def crawl_to_json():
     }
     process = CrawlerProcess(settings)
 
-    process.crawl(AccordionSpider)
+    process.crawl(AlamoSpider)
     process.start()

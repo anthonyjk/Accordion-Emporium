@@ -6,7 +6,7 @@ from threading import Thread
 
 sys.path.append('C:\\Users\\ajtru\\Music\\Accordion-Emporium\\accordionscraper\\spiders')
 import database
-from  accordionspider import AccordionSpider, crawl_to_json
+from  accordionspider import AlamoSpider, crawl_to_json
 
 app = Flask(__name__)
 
